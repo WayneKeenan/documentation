@@ -36,11 +36,12 @@ and then the Ethernet LEDs should light up around 5 seconds after the Pi powers 
 
 To capture the ethernet packets on the server, use tcpdump on the tftpboot server (or DHCP server if they are different). You will need to capture the packets there otherwise you will not be able to see packets that get sent directly because network switches are not hubs!
 
-``` 
-sudo tcpdump -i eth0 -w dump.pcap
+```
+sudo tcpdump  -i eth0 -n dst port 69 | grep -ioE '[a-fA-F0-9]+/start.elf'
 ```
 
-This will write everything from eth0 to a file dump.pcap you can then post process it or upload it to cloudshark.com for communication
+This will capture TFTP (port 69) traffic from eth0 and look for the hex serial number in the RRQ request, i.e. [`serial_number`]/start.elf.
+
 
 ### DHCP Request / Reply
 
